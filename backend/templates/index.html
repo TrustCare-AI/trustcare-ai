@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TrustCare AI</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h2>🩺 TrustCare AI – Healthcare Chatbot</h2>
+
+<div id="chat"></div>
+
+<input type="text" id="msg" placeholder="Enter symptoms..." />
+<button onclick="send()">Send</button>
+
+<script>
+function send() {
+    let input = document.getElementById("msg");
+    let message = input.value;
+    if (!message) return;
+
+    let chat = document.getElementById("chat");
+    chat.innerHTML += `<p><b>You:</b> ${message}</p>`;
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message: message})
+    })
+    .then(res => res.json())
+    .then(data => {
+        chat.innerHTML += `<p><b>Bot:</b> ${data.reply}</p>`;
+        chat.scrollTop = chat.scrollHeight;
+    });
+
+    input.value = "";
+}
+</script>
+
+</body>
+</html>
